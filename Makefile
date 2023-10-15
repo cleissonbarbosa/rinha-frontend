@@ -1,5 +1,5 @@
 build:
-	trunk serve --release --public-url=/rinha-frontend
+	trunk build --release --public-url=/rinha-frontend
 
 run:
 	trunk serve --open
