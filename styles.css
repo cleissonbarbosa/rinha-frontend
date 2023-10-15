@@ -1,0 +1,225 @@
+* {
+    box-sizing: border-box;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  }
+  
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #000000;
+  }
+  
+  img,
+  video {
+    max-width: 300px;
+    max-height: 500px;
+  }
+  
+  p {
+    text-align: center;
+  }
+  
+  label {
+    cursor: pointer;
+  }
+  
+  input#file-upload {
+    visibility: hidden;
+    font-size: 0;
+    height: 0;
+  }
+  
+  #wrapper {
+    width: 100%;
+    height: 100vh;
+    margin: auto auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  #title {
+    font-size: 48px;
+    text-align: center;
+    color: #000;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0;
+  }
+
+  #subtitle {
+    color: #000;
+    font-family: Inter;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  label[for="file-upload"] {
+    display: flex;
+    justify-content: center;
+  }
+
+  label[for="file-upload"] p {
+    width: fit-content;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    opacity: 0.7;
+    background: linear-gradient(180deg, #E4E4E4 0%, #F7F7F7 100%);
+  }
+
+  #error-area {
+    color: #BF0E0E;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  
+  #drop-container {
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #3d4141;
+    border: 1px dashed #fcfcfc;
+    border-radius: 1rem;
+  }
+  
+  #drop-container i {
+    font-size: 4rem;
+  }
+  
+  #json-area {
+    width: 100%;
+    max-width: 638px;
+    margin: 0 auto;
+  }
+
+  #json-area p {
+    text-align: unset;
+  }
+  
+  .json-title {
+    color: #000;
+    font-family: Inter;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: start;
+  }
+
+  .json-content {
+    text-align: start;
+    margin-left: -18px;
+  } 
+
+  .json-key {
+    color: #4E9590;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 176.523%; /* 28.244px */
+  }
+
+  .json-string {
+    color: #000;
+  }
+
+  .json-array .f-brackets, .json-array .l-brackets {
+    color: #F2CAB8;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 176.523%;
+  }
+
+  .json-array .f-brackets {
+    display: inline;
+    text-align: start;
+  }
+
+  .json-array .l-brackets {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .json-array .json-array-item {
+    margin-left: 18px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .json-array .json-array-item .json-array-item-idx {
+    color: #BFBFBF;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 176.523%;
+    position: relative;
+  }
+
+  .json-object {
+    margin: 0;
+    padding: 0;
+  }
+
+  .json-property {
+    display: block;
+    margin-left: 18px;
+  }
+
+  .json-property::before {
+    content: '';
+    width: 1px;
+    height: calc(100% - 65px);
+    background: #BFBFBF;
+    display: inline-block;
+    position: absolute;
+    left: -1px;
+    bottom: 0;
+    top: 30px;
+  }
+
+  .json-array .json-object {
+    position: relative;
+    display: block;
+  }
+
+  .json-array .json-object::before {
+    content: '';
+    width: 1px;
+    height: calc(100% - 15px);
+    background: #BFBFBF;
+    display: inline-block;
+    position: absolute;
+    left: 3px;
+    bottom: 0;
+    top: 5px;
+  }
+
+  .json-property {
+    position: relative;
+  }
+
+  span.json-separator:first-of-type {
+    color: #000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 176.523%;
+  }
