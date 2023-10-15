@@ -24,6 +24,7 @@ pub struct App {
     readers: HashMap<String, FileReader>,
     files: Vec<FileDetails>,
     is_error: bool,
+    is_loading: bool,
 }
 
 impl Component for App {
@@ -35,6 +36,7 @@ impl Component for App {
             readers: HashMap::default(),
             files: Vec::default(),
             is_error: false,
+            is_loading: false,
         }
     }
 
@@ -48,9 +50,11 @@ impl Component for App {
                 });
                 self.readers.remove(&file_name);
                 self.is_error = false;
+                self.is_loading = false;
                 true
             }
             Msg::Files(files) => {
+                self.is_loading = true;
                 for file in files.into_iter() {
                     let file_name = file.name();
                     let file_type = file.raw_mime_type();
@@ -70,11 +74,13 @@ impl Component for App {
                     self.readers.insert(file_name, task);
                     self.is_error = false;
                 }
+                self.is_loading = false;
                 true
             }
             Msg::Error(_) => {
                 self.files.clear();
                 self.is_error = true;
+                self.is_loading = false;
                 true
             }
         }
@@ -123,6 +129,17 @@ impl Component for App {
                             }
                         }
                     </div>
+                    {
+                        if self.is_loading {
+                            html! {
+                                <div id="loading">
+                                    <div class="fa fa-spinner fa-spin"></div>
+                                </div>
+                            }
+                        } else {
+                            html! {}
+                        }
+                    }
                 </div>
             }
         } else {
