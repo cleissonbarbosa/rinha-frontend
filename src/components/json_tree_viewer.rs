@@ -12,7 +12,7 @@ pub fn view_file(file: &FileDetails) -> Html {
         serde_json::Value::Array(a) => {
             html! {
                 <ul class="json-array">
-                    { for a.iter().map(|v| view_json_value(v)) }
+                    { for a.iter().map(view_json_value) }
                 </ul>
             }
         }
