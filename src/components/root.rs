@@ -173,7 +173,7 @@ impl Component for App {
                         }
 
                         {
-                            if self.is_loading {
+                            if self.is_loading && !is_error {
                                 html! {
                                     <div id="loading">
                                         <div class="fa fa-spinner fa-spin"></div>
