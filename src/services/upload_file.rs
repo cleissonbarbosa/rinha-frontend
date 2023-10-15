@@ -2,7 +2,6 @@ use super::super::components::app::Msg;
 use gloo::file::File;
 use web_sys::FileList;
 
-
 pub fn upload_files(files: Option<FileList>) -> Msg {
     let mut result = Vec::new();
 
@@ -16,10 +15,7 @@ pub fn upload_files(files: Option<FileList>) -> Msg {
 
         for file in files.clone() {
             if !file.raw_mime_type().contains("json") {
-                return Msg::Error(format!(
-                    "File {} is not a JSON file",
-                    file.name()
-                ));
+                return Msg::Error(format!("File {} is not a JSON file", file.name()));
             }
         }
         result.extend(files);

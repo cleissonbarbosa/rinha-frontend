@@ -58,18 +58,18 @@ fn view_json_value(value: &serde_json::Value) -> Html {
             html! {
                 <span class="json-array">
                     <p class="f-brackets">{ "["}</p>
-                        { 
+                        {
 
                             for a.iter().map(|v| {
                                 let item_index = index; // Captura o índice atual
                                 index += 1; // Incrementa o índice
-                                html!{ 
+                                html!{
                                     <p class="json-array-item">
-                                        <span class="json-array-item-idx"> { format!("{}: ", item_index) } </span> 
-                                        <span class="json-array-item-value"> { view_json_value(v) } </span> 
+                                        <span class="json-array-item-idx"> { format!("{}: ", item_index) } </span>
+                                        <span class="json-array-item-value"> { view_json_value(v) } </span>
                                     </p>
                                 }
-                            }) 
+                            })
                         }
                     <p class="l-brackets">{ "]"}</p>
                 </span>
