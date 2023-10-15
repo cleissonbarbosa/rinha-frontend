@@ -1,4 +1,4 @@
-use super::app::FileDetails;
+use super::root::FileDetails;
 use yew::{html, Html};
 
 pub fn view_file(file: &FileDetails) -> Html {

@@ -8,7 +8,8 @@ license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-yew = { git = "https://github.com/yewstack/yew/", features = ["csr"] }
+yew = { version = "0.21", features = ["csr"] }
+yew-hooks = "0.3"
 base64 = "0.21.4"
 gloo = "0.10"
 gloo-events = "0.2"
@@ -16,8 +17,15 @@ js-sys = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 wasm-bindgen = "0.2"
-wasm-bindgen-futures = "0.4"
 
 [dependencies.web-sys]
 version = "0.3"
-features = ["File", "DragEvent", "DataTransfer"]
+features = ["File", "DragEvent", "DataTransfer", "Window"]
+
+[dev-dependencies.web-sys]
+version = "0.3"
+features = [
+  "Document",
+  "Element",
+  "HtmlCollection",
+]

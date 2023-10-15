@@ -1,5 +1,4 @@
-extern crate base64;
-use components::app::App;
+use components::root::App;
 
 mod components;
 mod services;

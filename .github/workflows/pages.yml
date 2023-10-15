@@ -27,8 +27,8 @@ jobs:
               ~/.cargo/registry/cache/
               ~/.cargo/git/db/
               target/            
-            key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-            restore-keys: ${{ runner.os }}-cargo-
+            key: ${{ runner.os }}-cargo-linter-${{ hashFiles('**/Cargo.lock') }}
+            restore-keys: ${{ runner.os }}-cargo-linter-
 
         - name: Lint
           run: |
@@ -81,7 +81,7 @@ jobs:
             name: github-pages
             url: ${{steps.deployment.outputs.page_url}}
         runs-on: ubuntu-latest
-        needs: build
+        needs: ["build", "lint"]
         steps:
             - name: Deploy to GitHub Pages
               id: deployment

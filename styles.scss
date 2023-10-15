@@ -92,69 +92,44 @@ label[for="file-upload"] {
   p {
     text-align: unset;
   }
-}
-
-.json-title {
-  color: #000;
-  font-family: Inter;
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  text-align: start;
-}
-
-.json-content {
-  text-align: start;
-  margin-left: -18px;
-}
-
-.json-key, .json-separator {
-  color: #4E9590;
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 176.523%;
-  /* 28.244px */
-}
-
-.json-string {
-  color: #000;
-}
-
-.json-array .f-brackets,
-.json-array .l-brackets {
-  color: #F2CAB8;
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 176.523%;
-}
-
-.json-property {
-  display: block;
-  margin-left: 18px;
-  position: relative;
-
-  &::before {
-    content: '';
-    width: 1px;
-    height: calc(100% - 65px);
-    background: #BFBFBF;
-    display: inline-block;
-    position: absolute;
-    left: -1px;
-    bottom: 0;
-    top: 30px;
+  .json-title {
+    color: #000;
+    font-family: Inter;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: start;
   }
-}
-
-.json-array {
-
-  .f-brackets,
-  .l-brackets {
+  
+  .json-content {
+    text-align: start;
+    margin-left: -18px;
+  
+    .json-object {
+      margin: 0;
+      padding: 0;
+      position: relative;
+      display: block;
+    }
+  }
+  
+  .json-key, .json-separator {
+    color: #4E9590;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 176.523%;
+    /* 28.244px */
+  }
+  
+  .json-string {
+    color: #000;
+  }
+  
+  .json-array .f-brackets,
+  .json-array .l-brackets {
     color: #F2CAB8;
     font-family: Inter;
     font-size: 16px;
@@ -162,65 +137,103 @@ label[for="file-upload"] {
     font-weight: 700;
     line-height: 176.523%;
   }
-
-  .f-brackets {
-    display: inline;
-    text-align: start;
-  }
-
-  .l-brackets {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  .json-array-item {
+  
+  .json-property {
+    display: block;
     margin-left: 18px;
-    margin-top: 0;
-    margin-bottom: 0;
+    position: relative;
+  
+    &::before {
+      content: '';
+      width: 1px;
+      height: calc(100% - 65px);
+      background: #BFBFBF;
+      display: inline-block;
+      position: absolute;
+      left: -1px;
+      bottom: 0;
+      top: 30px;
+    }
 
-    .json-array-item-idx {
-      color: #BFBFBF;
+    >.json-object {
+      &::before {
+        display: none !important;
+      }
+    }
+  }
+  
+  .json-array {
+  
+    .f-brackets,
+    .l-brackets {
+      color: #F2CAB8;
+      font-family: Inter;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 176.523%;
+    }
+  
+    .f-brackets {
+      display: inline;
+      text-align: start;
+    }
+  
+    .l-brackets {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  
+    .json-array-item {
+      margin-left: 18px;
+      margin-top: 0;
+      margin-bottom: 0;
+  
+      .json-array-item-idx {
+        color: #BFBFBF;
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 176.523%;
+        position: relative;
+      }
+    }
+  
+    .json-object {
+      margin: 0;
+      padding: 0;
+      position: relative;
+      display: block;
+    }
+  
+    .json-object {
+      &::before {
+        content: '';
+        width: 1px;
+        height: calc(100% - 15px);
+        background: #BFBFBF;
+        display: inline-block;
+        position: absolute;
+        left: 3px;
+        bottom: 0;
+        top: 5px;
+      }
+    }
+  }
+  
+  span.json-separator {
+    &:first {
+      color: #000;
       font-family: Inter;
       font-size: 16px;
       font-style: normal;
       font-weight: 400;
       line-height: 176.523%;
-      position: relative;
-    }
-  }
-
-  .json-object {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    display: block;
-  }
-
-  .json-object {
-    &::before {
-      content: '';
-      width: 1px;
-      height: calc(100% - 15px);
-      background: #BFBFBF;
-      display: inline-block;
-      position: absolute;
-      left: 3px;
-      bottom: 0;
-      top: 5px;
     }
   }
 }
 
-span.json-separator {
-  &:first {
-    color: #000;
-    font-family: Inter;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 176.523%;
-  }
-}
 
 #loading {
   position: absolute;

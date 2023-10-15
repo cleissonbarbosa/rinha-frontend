@@ -1,4 +1,4 @@
-use super::super::components::app::Msg;
+use super::super::components::root::Msg;
 use gloo::file::File;
 use web_sys::FileList;
 
