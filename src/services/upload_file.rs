@@ -2,6 +2,7 @@ use super::super::components::app::Msg;
 use gloo::file::File;
 use web_sys::FileList;
 
+
 pub fn upload_files(files: Option<FileList>) -> Msg {
     let mut result = Vec::new();
 

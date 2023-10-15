@@ -18,3 +18,8 @@ cargo install --locked trunk
 ```sh
 trunk serve --open
 ```
+
+## Build
+```sh
+trunk serve --release --public-url=/rinha-frontend
+```

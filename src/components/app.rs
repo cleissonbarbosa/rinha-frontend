@@ -1,12 +1,11 @@
 use std::collections::HashMap;
+
+use gloo::file::{callbacks::FileReader, File};
+use web_sys::{DragEvent, Event, HtmlInputElement};
+use yew::{html, html::TargetCast, Callback, Component, Context, Html};
+
 use super::super::services::upload_file::upload_files;
 use super::json_tree_viewer::view_file;
-
-use gloo::file::callbacks::FileReader;
-use gloo::file::File;
-use web_sys::{DragEvent, Event, HtmlInputElement};
-use yew::html::TargetCast;
-use yew::{html, Callback, Component, Context, Html};
 
 pub struct FileDetails {
     pub name: String,
@@ -17,14 +16,21 @@ pub struct FileDetails {
 pub enum Msg {
     Loaded(String, String, Vec<u8>),
     Files(Vec<File>),
-    Error(String)
+    Error(String),
+    Loading(bool),
 }
 
 pub struct App {
     readers: HashMap<String, FileReader>,
     files: Vec<FileDetails>,
-    is_error: bool,
+    is_error: (bool, String),
     is_loading: bool,
+}
+
+impl From<()> for Msg {
+    fn from(_: ()) -> Self {
+        Msg::Error("".to_string())
+    }
 }
 
 impl Component for App {
@@ -35,7 +41,7 @@ impl Component for App {
         Self {
             readers: HashMap::default(),
             files: Vec::default(),
-            is_error: false,
+            is_error: (false, String::default()),
             is_loading: false,
         }
     }
@@ -49,7 +55,7 @@ impl Component for App {
                     name: file_name.clone(),
                 });
                 self.readers.remove(&file_name);
-                self.is_error = false;
+                self.is_error = (false, String::default());
                 self.is_loading = false;
                 true
             }
@@ -58,38 +64,49 @@ impl Component for App {
                 for file in files.into_iter() {
                     let file_name = file.name();
                     let file_type = file.raw_mime_type();
-
-                    let task = {
-                        let link = ctx.link().clone();
-                        let file_name = file_name.clone();
-
-                        gloo::file::callbacks::read_as_bytes(&file, move |res| {
-                            link.send_message(Msg::Loaded(
-                                file_name,
-                                file_type,
-                                res.expect("failed to read file"),
-                            ))
-                        })
-                    };
-                    self.readers.insert(file_name, task);
-                    self.is_error = false;
+                    let link = ctx.link().clone();
+                    let reader =
+                        gloo::file::callbacks::read_as_bytes(&file, move |res| match res {
+                            Ok(data) => {
+                                if let Some(reader) =
+                                    serde_json::from_slice::<serde_json::Value>(&data).err()
+                                {
+                                    link.send_message(Msg::Error(format!(
+                                        "failed to parse file: {}",
+                                        reader
+                                    )));
+                                    return;
+                                }
+                                link.send_message(Msg::Loaded(file_name.clone(), file_type, data));
+                            }
+                            Err(_) => {
+                                link.send_message(Msg::Error("failed to read file".to_string()));
+                            }
+                        });
+                    self.readers.insert(file.name(), reader);
+                    self.is_error = (false, String::default());
                 }
                 self.is_loading = false;
                 true
             }
-            Msg::Error(_) => {
+            Msg::Error(message) => {
                 self.files.clear();
-                self.is_error = true;
+                self.is_error = (true, message);
                 self.is_loading = false;
+                true
+            }
+            Msg::Loading(is_loading) => {
+                self.is_loading = is_loading;
                 true
             }
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
+        let (is_error, message) = self.is_error.clone();
         if self.files.is_empty() {
             html! {
-                <div 
+                <div
                     for="file-upload"
                     id="wrapper"
                     ondragover={Callback::from(|event: DragEvent| {
@@ -104,6 +121,7 @@ impl Component for App {
                         let files = event.data_transfer().unwrap().files();
                         upload_files(files)
                     })}
+                    onchange={ctx.link().clone().callback(move |_: Event| Msg::Loading(true))}
                 >
                     <p id="title" title="JSON Tree Viewer">{ "JSON Tree Viewer" }</p>
                     <p id="subtitle">{ "Simple JSON Viewer that runs completely on-client. No data exchange"}</p>
@@ -115,15 +133,16 @@ impl Component for App {
                         type="file"
                         accept="application/json"
                         multiple={false}
-                        onchange={ctx.link().callback(move |e: Event| {
+                        onchange={ctx.link().clone().callback(move |e: Event| {
                             let input: HtmlInputElement = e.target_unchecked_into();
                             upload_files(input.files())
                         })}
                     />
                     <div id="error-area">
-                        { 
-                            if self.files.is_empty() && self.is_error {
-                                html! { <p>{"Error loading file"}</p> } 
+                        {
+
+                            if self.files.is_empty() && is_error {
+                                html! { <p>{message}</p> }
                             } else {
                                 html! {}
                             }
@@ -143,7 +162,7 @@ impl Component for App {
                 </div>
             }
         } else {
-            html!{
+            html! {
                 <div id="json-area">
                     { for self.files.iter().map(view_file) }
                 </div>
