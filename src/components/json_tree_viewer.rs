@@ -141,9 +141,7 @@ fn page_json(value: &serde_json::Value, page_size: usize) -> Vec<serde_json::Val
             for v in a.iter() {
                 if a.len() == 1 && v.is_array() {
                     for b in v.as_array().unwrap().iter() {
-                        pages.push(serde_json::Value::Array(
-                            [(b.clone())].to_vec(),
-                        ));
+                        pages.push(serde_json::Value::Array([(b.clone())].to_vec()));
                         index += 1;
                         if index == page_size {
                             page = Vec::new();
