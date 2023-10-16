@@ -1,11 +1,14 @@
 use std::collections::HashMap;
 
 use gloo::file::{callbacks::FileReader, File};
+use serde_json::Value;
 use web_sys::{DragEvent, Event, HtmlInputElement};
 use yew::html::Scope;
 use yew::prelude::*;
 use yew::{html, html::TargetCast, Callback, Component, Context, Html};
 use yew_hooks::prelude::*;
+
+use crate::components::json_tree_viewer::get_page_size;
 
 use super::super::services::upload_file::upload_files;
 use super::json_tree_viewer::view_file;
@@ -14,11 +17,11 @@ use super::json_tree_viewer::view_file;
 pub struct FileDetails {
     pub name: String,
     pub file_type: String,
-    pub data: Vec<u8>,
+    pub data: Value,
 }
 
 pub enum Msg {
-    Loaded(String, String, Vec<u8>),
+    Loaded(String, String, Value),
     Files(Vec<File>),
     Error(String),
     Loading(bool),
@@ -90,22 +93,23 @@ impl Component for App {
                     let reader =
                         gloo::file::callbacks::read_as_bytes(&file, move |res| match res {
                             Ok(data) => {
-                                if let Some(reader) =
-                                    serde_json::from_slice::<serde_json::Value>(&data).err()
-                                {
-                                    link.send_message(Msg::Error(format!(
-                                        "failed to parse file: {}",
-                                        reader
-                                    )));
+                                if let Ok(reader) =
+                                    serde_json::from_slice::<serde_json::Value>(&data)
+                                {   
+                                    link.send_message(Msg::Loaded(file_name.clone(), file_type, reader));
                                     return;
                                 }
-                                link.send_message(Msg::Loaded(file_name.clone(), file_type, data));
+
+                                link.send_message(Msg::Error(format!(
+                                    "failed to parse file: {}",
+                                    file_name
+                                )));
                             }
                             Err(_) => {
                                 link.send_message(Msg::Error("failed to read file".to_string()));
                             }
                         });
-                    self.readers.insert(file.name(), reader);
+                    self.readers.insert(file.clone().name(), reader);
                     self.is_error = (false, String::default());
                 }
                 self.is_loading = false;
@@ -126,7 +130,7 @@ impl Component for App {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let (is_error, message) = self.is_error.clone();
-
+        
         if self.files.is_empty() {
             html! {
                 <>
@@ -206,9 +210,43 @@ struct ContentProps {
 
 #[function_component(Content)]
 fn content(props: &ContentProps) -> HtmlResult {
+    let current_page = use_state(|| 0);
+    let page_size = get_page_size(&props.files[0].data);
+    let onclick_prev = {
+        let current_page = current_page.clone();
+        Callback::from(move |_| {
+            if *current_page == 0 {
+                return;
+            }
+            current_page.set(*current_page - 1);
+        })
+    };
+    let onclick_next = {
+        let current_page = current_page.clone();
+        Callback::from(move |_| {
+            if *current_page >= page_size - 1 {
+                return;
+            }
+            current_page.set(*current_page + 1);
+        })
+    };
     Ok(html! {
         <div id="json-area">
-            { for props.files.iter().map(view_file) }
+            <div class="json-tree-viewer">
+                { for props.files.iter().map(|v| view_file(v, *current_page, page_size)) }
+            </div>
+            { 
+                if get_page_size(&props.files[0].data) > 10 {
+                    html! {
+                        <div class="json-pagination">
+                            <button class="json-pagination-button" onclick={onclick_prev}>{"<"}</button>
+                            <button class="json-pagination-button" onclick={onclick_next}>{">"}</button>
+                        </div>
+                    }
+                } else {
+                    html! {}
+                }
+            }
         </div>
     })
 }
