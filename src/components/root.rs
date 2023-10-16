@@ -95,8 +95,12 @@ impl Component for App {
                             Ok(data) => {
                                 if let Ok(reader) =
                                     serde_json::from_slice::<serde_json::Value>(&data)
-                                {   
-                                    link.send_message(Msg::Loaded(file_name.clone(), file_type, reader));
+                                {
+                                    link.send_message(Msg::Loaded(
+                                        file_name.clone(),
+                                        file_type,
+                                        reader,
+                                    ));
                                     return;
                                 }
 
@@ -130,7 +134,7 @@ impl Component for App {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let (is_error, message) = self.is_error.clone();
-        
+
         if self.files.is_empty() {
             html! {
                 <>
@@ -235,7 +239,7 @@ fn content(props: &ContentProps) -> HtmlResult {
             <div class="json-tree-viewer">
                 { for props.files.iter().map(|v| view_file(v, *current_page, page_size)) }
             </div>
-            { 
+            {
                 if get_page_size(&props.files[0].data) > 10 {
                     html! {
                         <div class="json-pagination">

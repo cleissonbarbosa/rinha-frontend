@@ -6,9 +6,9 @@ pub fn get_page_size(value: &serde_json::Value) -> usize {
         serde_json::Value::Array(a) => {
             if a.len() == 1 {
                 if a[0].is_array() {
-                    return a[0].as_array().unwrap().len()
-                } else if a[0].is_object(){
-                    return a[0].as_object().unwrap().len()                                                   
+                    return a[0].as_array().unwrap().len();
+                } else if a[0].is_object() {
+                    return a[0].as_object().unwrap().len();
                 }
             }
             a.len()
@@ -16,16 +16,15 @@ pub fn get_page_size(value: &serde_json::Value) -> usize {
         serde_json::Value::Object(o) => {
             if o.len() == 1 {
                 if o.values().next().unwrap().is_array() {
-                    return o.values().next().unwrap().as_array().unwrap().len()
-                } else if o.values().next().unwrap().is_object(){
-                    return o.values().next().unwrap().as_object().unwrap().len()                                                   
+                    return o.values().next().unwrap().as_array().unwrap().len();
+                } else if o.values().next().unwrap().is_object() {
+                    return o.values().next().unwrap().as_object().unwrap().len();
                 }
             }
             o.len()
         }
-        _ => 1
+        _ => 1,
     }
-
 }
 
 pub fn view_file(file: &FileDetails, page: usize, page_size: usize) -> Html {
@@ -33,8 +32,8 @@ pub fn view_file(file: &FileDetails, page: usize, page_size: usize) -> Html {
     let content_paged = page_size > 10;
 
     let content_vec: Vec<serde_json::Value> = match content_paged {
-        true =>  page_json(&content, page_size),
-        false => vec![content.clone()]
+        true => page_json(content, page_size),
+        false => vec![content.clone()],
     };
 
     let highlighted_content = match &content_vec[page] {
@@ -77,7 +76,7 @@ pub fn view_file(file: &FileDetails, page: usize, page_size: usize) -> Html {
                     html! {}
                 }
             }
-            
+
         </div>
     }
 }
@@ -143,7 +142,7 @@ fn page_json(value: &serde_json::Value, page_size: usize) -> Vec<serde_json::Val
                 if a.len() == 1 && v.is_array() {
                     for b in v.as_array().unwrap().iter() {
                         pages.push(serde_json::Value::Array(
-                            [(b.clone())].iter().cloned().collect(),
+                            [(b.clone())].to_vec(),
                         ));
                         index += 1;
                         if index == page_size {
