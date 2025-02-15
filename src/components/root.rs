@@ -288,8 +288,8 @@ fn root(_: &RootProps) -> Html {
             let html = document.document_element().unwrap();
             let btn_toggle = html.query_selector(".theme-toggle").unwrap().unwrap();
 
-            let _ = html.set_class_name("dark");
-            let _ = btn_toggle.set_inner_html("<i class=\"fa fa-lightbulb-o\"></i> Light");
+            html.set_class_name("dark");
+            btn_toggle.set_inner_html("<i class=\"fa fa-lightbulb-o\"></i> Light");
         }
         || ()
     });
