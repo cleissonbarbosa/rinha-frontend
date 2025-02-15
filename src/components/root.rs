@@ -138,7 +138,7 @@ impl Component for App {
         if self.files.is_empty() {
             html! {
                 <>
-                    <Root scope={ctx.clone().link()} />
+                    <Root scope={ctx.link()} />
                     <div
                         for="file-upload"
                         id="wrapper"
@@ -197,7 +197,7 @@ impl Component for App {
         } else {
             html! {
                 <>
-                    <Root scope={ctx.clone().link()} />
+                    <Root scope={ctx.link()} />
                     <Suspense>
                         <Content files={self.files.clone()} />
                     </Suspense>
@@ -276,9 +276,43 @@ impl Clone for RootProps {
 
 #[function_component(Root)]
 fn root(_: &RootProps) -> Html {
-    use_favicon("https://crates.io/favicon.ico".to_string());
+    use_favicon(
+        "https://cdn4.iconfinder.com/data/icons/developer-vol-2/100/developer-1-27-512.png"
+            .to_string(),
+    );
+
+    // Initialize theme based on system preference
+    use_effect(|| {
+        if super::json_tree_viewer::get_system_theme() {
+            let document = web_sys::window().unwrap().document().unwrap();
+            let html = document.document_element().unwrap();
+            let btn_toggle = html.query_selector(".theme-toggle").unwrap().unwrap();
+
+            let _ = html.set_class_name("dark");
+            let _ = btn_toggle.set_inner_html("<i class=\"fa fa-lightbulb-o\"></i> Light");
+        }
+        || ()
+    });
+
+    let onclick = Callback::from(|_| {
+        super::json_tree_viewer::toggle_theme();
+
+        let document = web_sys::window().unwrap().document().unwrap();
+        let html = document.document_element().unwrap();
+        let btn_toggle = html.query_selector(".theme-toggle").unwrap().unwrap();
+        if super::json_tree_viewer::get_theme() == "dark" {
+            btn_toggle.set_inner_html("<i class=\"fa fa-lightbulb-o\"></i> Light");
+        } else {
+            btn_toggle.set_inner_html("<i class=\"fa fa-moon-o\"></i> Dark");
+        }
+    });
 
     html! {
-        <span></span>
+        <>
+            <button onclick={onclick} class="theme-toggle">
+                <i class="fa fa-moon-o"></i>
+                {"Theme"}
+            </button>
+        </>
     }
 }
