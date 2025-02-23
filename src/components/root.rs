@@ -7,6 +7,7 @@ use yew::html::Scope;
 use yew::prelude::*;
 use yew::{html, html::TargetCast, Callback, Component, Context, Html};
 use yew_hooks::prelude::*;
+use wasm_bindgen_futures::spawn_local;
 
 use crate::components::json_tree_viewer::get_page_size;
 
@@ -93,21 +94,23 @@ impl Component for App {
                     let reader =
                         gloo::file::callbacks::read_as_bytes(&file, move |res| match res {
                             Ok(data) => {
-                                if let Ok(reader) =
-                                    serde_json::from_slice::<serde_json::Value>(&data)
-                                {
-                                    link.send_message(Msg::Loaded(
-                                        file_name.clone(),
-                                        file_type,
-                                        reader,
-                                    ));
-                                    return;
-                                }
+                                spawn_local(async move {
+                                    if let Ok(reader) =
+                                        serde_json::from_slice::<serde_json::Value>(&data)
+                                    {
+                                        link.send_message(Msg::Loaded(
+                                            file_name.clone(),
+                                            file_type,
+                                            reader,
+                                        ));
+                                        return;
+                                    }
 
-                                link.send_message(Msg::Error(format!(
-                                    "failed to parse file: {}",
-                                    file_name
-                                )));
+                                    link.send_message(Msg::Error(format!(
+                                        "failed to parse file: {}",
+                                        file_name
+                                    )));
+                                });
                             }
                             Err(_) => {
                                 link.send_message(Msg::Error("failed to read file".to_string()));
