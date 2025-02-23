@@ -144,7 +144,7 @@ label[for="file-upload"] {
   max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px 80px;
-  
+
   .json-title {
     color: var(--text-color);
     font-size: 32px;
@@ -152,14 +152,14 @@ label[for="file-upload"] {
     text-align: start;
     margin-bottom: 20px;
   }
-  
+
   .json-content {
     text-align: start;
     margin-left: -18px;
     background: var(--hover-color);
     padding: 20px;
     border-radius: 12px;
-    
+
     .json-object {
       margin: 0;
       padding: 0;
@@ -167,36 +167,38 @@ label[for="file-upload"] {
       display: block;
     }
   }
-  
-  .json-key, .json-separator {
+
+  .json-key,
+  .json-separator {
     color: var(--key-color);
     font-size: 16px;
     line-height: 1.8;
   }
-  
+
   .json-string {
     color: var(--text-color);
   }
-  
+
   .json-array {
+
     .f-brackets,
     .l-brackets {
       color: var(--bracket-color);
       font-weight: 700;
     }
   }
-  
+
   .json-property {
     display: block;
     margin-left: 18px;
     position: relative;
     padding: 4px 0;
-    
+
     &:hover {
       background: var(--hover-color);
       border-radius: 4px;
     }
-  
+
     &::before {
       content: '';
       width: 1px;
@@ -209,24 +211,24 @@ label[for="file-upload"] {
       top: 30px;
     }
   }
-  
+
   .json-array {
     .json-array-item {
       margin-left: 18px;
       padding: 4px 0;
-      
+
       &:hover {
         background: var(--hover-color);
         border-radius: 4px;
       }
-  
+
       .json-array-item-idx {
         color: var(--border-color);
         opacity: 0.8;
       }
     }
   }
-  
+
   .json-pagination {
     position: fixed;
     bottom: 0;
@@ -258,12 +260,12 @@ label[for="file-upload"] {
       }
     }
   }
-  
+
   .json-pagination-stats {
-    position: absolute;
+    position: fixed;
     right: 20px;
-    top: 20px;
-    border-radius: 8px;
+    top: 70px;
+    border-radius: 25px;
     background: var(--button-bg);
     font-size: 14px;
     padding: 8px 16px;
