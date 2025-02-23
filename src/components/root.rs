@@ -2,12 +2,12 @@ use std::collections::HashMap;
 
 use gloo::file::{callbacks::FileReader, File};
 use serde_json::Value;
+use wasm_bindgen_futures::spawn_local;
 use web_sys::{DragEvent, Event, HtmlInputElement};
 use yew::html::Scope;
 use yew::prelude::*;
 use yew::{html, html::TargetCast, Callback, Component, Context, Html};
 use yew_hooks::prelude::*;
-use wasm_bindgen_futures::spawn_local;
 
 use crate::components::json_tree_viewer::get_page_size;
 
